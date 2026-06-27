@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Offset in-page anchor targets so the sticky navbar never overlaps them. */
+    scroll-padding-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    overflow-x: clip; /* guard against any decorative element causing h-scroll */
+    background-color: var(--sand);
+    color: var(--ink-on-sand);
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
+    /* Subtle paper-grain texture on the sand background for depth. */
+    background-image:
+      radial-gradient(
+        1200px 800px at 80% -10%,
+        rgba(237, 95, 31, 0.06),
+        transparent 60%
+      ),
+      radial-gradient(
+        1000px 700px at -10% 30%,
+        rgba(18, 81, 99, 0.05),
+        transparent 55%
+      ),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    background-attachment: fixed, fixed, fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    line-height: 1.12;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  /* Accessible, on-brand focus ring everywhere. */
+  :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: rgba(237, 95, 31, 0.22);
+  }
+
+  img,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+@layer components {
+  .container-x {
+    width: var(--container);
+    margin-inline: auto;
+  }
+
+  .section-pad {
+    padding-block: var(--section-py);
+  }
+
+  /* Aswan footage orientation fix: rotate by the single tunable token and
+     scale up so the rotated corners never reveal empty space. object-fit
+     cover keeps it filling the frame. */
+  .aswan-video {
+    position: absolute;
+    top: 50%;
+    inset-inline-start: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%) rotate(var(--aswan-rotate)) scale(2.2);
+    transform-origin: center;
+  }
+
+  /* Gentle Ken-Burns drift on the video wrapper. */
+  .aswan-kenburns {
+    animation: kenburns 20s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+@layer utilities {
+  /* Honor reduced-motion globally for CSS keyframe animations. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}

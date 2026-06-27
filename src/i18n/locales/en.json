@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "langName": "English",
+    "switchTo": "العربية"
+  },
+  "nav": {
+    "about": "About",
+    "program": "Program",
+    "reviews": "Reviews",
+    "booking": "Booking",
+    "contact": "Contact",
+    "search": "Search",
+    "menu": "Menu",
+    "close": "Close",
+    "skip": "Skip to content"
+  },
+  "brand": {
+    "name": "ERTH MASR",
+    "latin": "ERTH MASR",
+    "slogan": "خلوة يا بلدي"
+  },
+  "hero": {
+    "title": "A Journey Inside Egypt",
+    "subtitle": "Enjoy an unforgettable journey through the land of civilization, with programs designed just for you",
+    "cta": "Book now",
+    "scroll": "Discover more",
+    "badge": "Khalwa ya Baladi"
+  },
+  "about": {
+    "title": "About us",
+    "intro": "“Erith” is a leading platform specialized in knowledge-driven travel experiences that revive awareness of heritage",
+    "vision": "Vision: to be the leading reference for knowledge- and identity-based tourism, turning Egypt from a conventional destination into an inspiring journey of discovery",
+    "mission": "Mission: to empower travelers and enthusiasts to explore Egypt's true heritage through accurate information and excellent organization",
+    "introLabel": "Who we are",
+    "visionLabel": "Vision",
+    "missionLabel": "Mission",
+    "stat1": { "number": 10, "prefix": "", "suffix": "", "unit": "thousand", "caption": "happy clients who shared their adventures discovering Egypt" },
+    "stat2": { "number": 500, "prefix": "+", "suffix": "", "unit": "trips", "caption": "completed successfully to the highest standards of quality and safety" },
+    "stat3": { "number": 25, "prefix": "", "suffix": "", "unit": "destinations", "caption": "covering Egypt's finest cities from Nubia to the North Coast" },
+    "stat4": { "number": 10, "prefix": "", "suffix": "", "unit": "years", "caption": "of experience organizing tours inside Egypt" }
+  },
+  "program": {
+    "title": "The Journey Program",
+    "kicker": "Your sailing itinerary",
+    "dest1": {
+      "title": "Elephantine Island",
+      "text": "In the middle of the Nile at Aswan, Elephantine was once an important religious and trade center and a southern frontier fortress. It is known for monuments such as the Temple of Khnum and the Nilometer, and for its lively Nubian villages"
+    },
+    "dest2": {
+      "title": "The Nubian Village",
+      "text": "More than a place to live, it is a living embodiment of an ancient people's history and culture — carrying a unique authenticity and heritage worth exploring and appreciating"
+    },
+    "dest3": {
+      "title": "Abu Simbel Temple",
+      "text": "A masterpiece carved into rock by order of Ramses II in Nubia. It embodies the grandeur of ancient Egypt and humanity's feat in rescuing it from flooding — a great symbol of ancient Egyptian civilization"
+    },
+    "download": "Download program",
+    "book": "Book now"
+  },
+  "aswan": {
+    "title": "The Story of Aswan",
+    "caption": "Footage from our journeys into the heart of Nubia",
+    "kicker": "Short film"
+  },
+  "reviews": {
+    "title": "Our clients shared exceptional moments discovering the true heritage of Egypt",
+    "kicker": "What our clients say",
+    "r1": { "name": "Abu Salem", "country": "(Saudi Arabia)", "rating": "4.2", "text": "Excellent organization and a complete program — the Nubian village visit especially" },
+    "r2": { "name": "Ben Najah", "country": "(UAE)", "rating": "4.5", "text": "The magic of Philae temple is indescribable, and the Nubian village with its colors" },
+    "r3": { "name": "Hakim Ziyech", "country": "(Morocco)", "rating": "4.2", "text": "The trip was very well organized, and waking up to the Nile view was a dream come true" },
+    "r4": { "name": "Abdullah Ahmed", "country": "(Sudan)", "rating": "4.5", "text": "From welcome to farewell everything was perfect — the Nubian food tasted incredible" }
+  },
+  "explore": {
+    "title": "Explore Egypt",
+    "kicker": "Selected destinations",
+    "subtitle": "From the temples of the south to the northern shores — glimpses of the finest the land of civilization has to offer",
+    "items": {
+      "abuSimbel": { "title": "Abu Simbel", "caption": "Two temples carved into rock, guarding Egypt's south for millennia" },
+      "philae": { "title": "Pharaonic Temple", "caption": "Reliefs and columns telling the tales of the gods by the Nile" },
+      "balloons": { "title": "Luxor Balloons", "caption": "Sunrise over the West Bank, a balloon drifting above the Valley of the Kings" },
+      "qaitbay": { "title": "Qaitbay Citadel", "caption": "A Mamluk fortress standing guard over the Alexandria sea" },
+      "azhar": { "title": "Al-Azhar Mosque", "caption": "A beacon of learning and a minaret glowing in historic Cairo" },
+      "montaza": { "title": "Montaza Palace", "caption": "Royal gardens and a palace overlooking the Mediterranean in Alexandria" },
+      "toutankhamun": { "title": "Tutankhamun's Treasures", "caption": "A golden mask that captures the splendor of pharaonic Egypt" },
+      "ibnTulun": { "title": "Ibn Tulun Mosque", "caption": "Cairo's oldest mosque with its unique spiral minaret" }
+    }
+  },
+  "booking": {
+    "title": "Book your journey now",
+    "subtitle": "Begin your journey into the depth of Egyptian civilization with programs built for an unforgettable experience",
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "submit": "Submit",
+    "submitting": "Submitting…",
+    "followus": "Follow us",
+    "success": "Got it! We'll reach out shortly to complete your booking.",
+    "errorEmail": "Please enter a valid email address",
+    "errorPassword": "Password must be at least 6 characters"
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "We'd love to hear from you anytime",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone",
+    "message": "Your message",
+    "placeholderFirst": "e.g. John",
+    "placeholderLast": "e.g. Doe",
+    "placeholderPhone": "01xxxxxxxxx",
+    "placeholderHere": "Enter here",
+    "send": "Send message",
+    "sending": "Sending…",
+    "success": "Your message has been sent — thank you for reaching out!",
+    "errorRequired": "This field is required",
+    "errorPhone": "Please enter a valid phone number",
+    "addressTitle": "Address",
+    "address": "37 Ahmed Orabi, Media City, El Agouza, Giza",
+    "phonesTitle": "Contact numbers",
+    "phones": "01227793777 — 01027793845",
+    "emailTitle": "Email",
+    "email": "ticketing@rabietours.com",
+    "hoursTitle": "Working hours",
+    "hours": "Mon–Fri 09:00–22:00 · Sun 11:00–20:00 · Sat: closed",
+    "mapTitle": "Rabie Tours location on the map"
+  },
+  "footer": {
+    "tagline": "Heritage journeys that revive your awareness of Egypt's true legacy",
+    "quickLinks": "Quick links",
+    "followus": "Follow us",
+    "rights": "All rights reserved",
+    "madeWith": "Made with passion in Egypt"
+  },
+  "a11y": {
+    "playVideo": "Play video",
+    "pauseVideo": "Pause video",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "tiktok": "TikTok"
+  }
+}

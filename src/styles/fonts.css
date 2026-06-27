@@ -1,0 +1,73 @@
+/* fonts.css — self-hosted brand fonts (no external CDN; Vercel-friendly).
+   Files live in /public/assets/fonts/ and are served at /assets/fonts/.
+
+   Role map (see tokens.css):
+     AR display  → Kufam            (Kufam.ttf, variable 400–900)
+     AR body/UI  → Cairo            (Cairo.ttf, variable 200–1000)
+     AR naskh    → Traditional Arabic (TraditionalArabic-Regular/Bold.ttf)
+     Latin disp. → Acumin → Archivo (Archivo.ttf variable; Acumin = paid Adobe
+                                      font, not provided — drop the .otf in and
+                                      uncomment the block below to switch)
+     fallback    → Nirmala UI       (Nirmala.ttf) */
+
+@font-face {
+  font-family: "Cairo";
+  src: url("/assets/fonts/Cairo.ttf") format("truetype");
+  font-weight: 200 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Kufam";
+  src: url("/assets/fonts/Kufam.ttf") format("truetype");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Archivo";
+  src: url("/assets/fonts/Archivo.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Traditional Arabic";
+  src: url("/assets/fonts/TraditionalArabic-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Traditional Arabic";
+  src: url("/assets/fonts/TraditionalArabic-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nirmala UI";
+  src: url("/assets/fonts/Nirmala.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Acumin Variable Concept — paid Adobe font, NOT in the provided files.
+   Drop AcuminVariableConcept.otf into /public/assets/fonts/ and uncomment;
+   tokens.css already lists "Acumin" first for Latin display, so this takes
+   over from the Archivo stand-in automatically. */
+/*
+@font-face {
+  font-family: "Acumin";
+  src: local("Acumin Variable Concept"),
+       url("/assets/fonts/AcuminVariableConcept.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+*/
