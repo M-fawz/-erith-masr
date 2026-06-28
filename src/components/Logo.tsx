@@ -18,7 +18,7 @@ export function Logo({ className }: { className?: string }) {
         alt={t("brand.name")}
         width={220}
         height={120}
-        className="h-10 w-auto object-contain md:h-12"
+        className="h-16 w-auto object-contain md:h-20"
       />
     </a>
   );
