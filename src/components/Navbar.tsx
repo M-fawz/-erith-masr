@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Search, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { BrandSlogan } from "./BrandSlogan";
@@ -28,7 +27,7 @@ function SearchPill({ className }: { className?: string }) {
         type="search"
         placeholder={t("nav.search")}
         aria-label={t("nav.search")}
-        className="w-full bg-transparent text-sm text-ink outline-none placeholder:text-ink-soft/70"
+        className="w-full bg-transparent text-base text-ink outline-none placeholder:text-ink-soft/70 md:text-sm"
       />
     </form>
   );
@@ -80,10 +79,19 @@ function NavLinks({
 }
 
 export function Navbar() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const scrolled = useScrolled(8);
   const active = useScrollSpy(SECTION_IDS);
   const [open, setOpen] = useState(false);
+  const drawerRef = useRef<HTMLElement>(null);
+  // The drawer is pinned to the inline-end edge; the slide transform is physical,
+  // so it must slide off toward the right in LTR and the left in RTL.
+  const drawerOffscreen = i18n.dir() === "rtl" ? "-100%" : "100%";
+
+  // Keep the off-screen drawer out of the tab order / a11y tree when closed.
+  useEffect(() => {
+    if (drawerRef.current) drawerRef.current.inert = !open;
+  }, [open]);
 
   // Lock body scroll + close drawer on Escape while the mobile drawer is open.
   useEffect(() => {
@@ -134,56 +142,49 @@ export function Navbar() {
         </nav>
       </Container>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-sm lg:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setOpen(false)}
-            />
-            <motion.aside
-              className="fixed inset-y-0 end-0 z-50 flex w-[82%] max-w-sm flex-col gap-6 bg-cream p-6 shadow-card lg:hidden"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 320, damping: 34 }}
-              role="dialog"
-              aria-modal="true"
-              aria-label={t("nav.menu")}
-            >
-              <div className="flex items-center justify-between">
-                <Logo />
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  aria-label={t("a11y.closeMenu")}
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-ink hover:bg-sand/60"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-
-              <SearchPill />
-
-              <NavLinks
-                active={active}
-                onNavigate={() => setOpen(false)}
-                className="flex flex-col gap-4 text-lg"
-                itemClassName="text-xl"
-              />
-
-              <div className="mt-auto flex items-center justify-between">
-                <BrandSlogan />
-                <LanguageToggle />
-              </div>
-            </motion.aside>
-          </>
+      {/* Mobile drawer (CSS transitions; framer-motion stays off the critical path) */}
+      <div
+        className={cn(
+          "fixed inset-0 z-40 bg-ink/40 transition-opacity duration-300 lg:hidden",
+          open ? "opacity-100 backdrop-blur-sm" : "pointer-events-none opacity-0",
         )}
-      </AnimatePresence>
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+      <aside
+        ref={drawerRef}
+        className="fixed inset-y-0 end-0 z-50 flex w-[82%] max-w-sm flex-col gap-6 bg-cream p-6 shadow-card transition-transform duration-300 ease-out lg:hidden motion-reduce:transition-none"
+        style={{ transform: open ? "translateX(0)" : `translateX(${drawerOffscreen})` }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("nav.menu")}
+      >
+        <div className="flex items-center justify-between">
+          <Logo />
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label={t("a11y.closeMenu")}
+            className="flex h-10 w-10 items-center justify-center rounded-full text-ink hover:bg-sand/60"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <SearchPill />
+
+        <NavLinks
+          active={active}
+          onNavigate={() => setOpen(false)}
+          className="flex flex-col gap-4 text-lg"
+          itemClassName="text-xl"
+        />
+
+        <div className="mt-auto flex items-center justify-between">
+          <BrandSlogan />
+          <LanguageToggle />
+        </div>
+      </aside>
     </header>
   );
 }

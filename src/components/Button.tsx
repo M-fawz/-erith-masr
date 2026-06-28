@@ -1,4 +1,4 @@
-import { motion, type HTMLMotionProps } from "framer-motion";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
 type Variant = "dark" | "orange" | "outline";
@@ -6,7 +6,9 @@ type Size = "md" | "lg";
 
 const base =
   "inline-flex items-center justify-center gap-2 rounded-pill font-body font-semibold " +
-  "transition-colors duration-200 focus-visible:outline-none select-none";
+  "transition-[transform,background-color,color,box-shadow] duration-200 focus-visible:outline-none " +
+  "select-none will-change-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] " +
+  "motion-reduce:transform-none motion-reduce:transition-colors";
 
 const variants: Record<Variant, string> = {
   dark: "bg-ink text-white shadow-soft hover:bg-orange",
@@ -26,29 +28,18 @@ type CommonProps = {
 };
 
 type ButtonAsButton = CommonProps &
-  Omit<HTMLMotionProps<"button">, "ref"> & { href?: undefined };
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "ref"> & { href?: undefined };
 type ButtonAsLink = CommonProps &
-  Omit<HTMLMotionProps<"a">, "ref"> & { href: string };
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "ref"> & { href: string };
 
+/** Brand pill button (dark / orange / outline). CSS-only press + hover lift so
+ *  it stays off the framer-motion critical path. */
 export function Button(props: ButtonAsButton | ButtonAsLink) {
   const { variant = "dark", size = "md", className, ...rest } = props;
   const cls = cn(base, variants[variant], sizes[size], className);
-  const motionProps = {
-    whileHover: { y: -2 },
-    whileTap: { scale: 0.97 },
-    transition: { type: "spring", stiffness: 400, damping: 22 },
-  } as const;
 
   if ("href" in props && props.href !== undefined) {
-    return (
-      <motion.a className={cls} {...motionProps} {...(rest as HTMLMotionProps<"a">)} />
-    );
+    return <a className={cls} {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)} />;
   }
-  return (
-    <motion.button
-      className={cls}
-      {...motionProps}
-      {...(rest as HTMLMotionProps<"button">)}
-    />
-  );
+  return <button className={cls} {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)} />;
 }

@@ -25,6 +25,8 @@ export default defineConfig({
   build: {
     target: "es2020",
     cssCodeSplit: true,
+    // Always wipe dist first so removed assets (old videos/fonts) never linger.
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         // Keep the heavy animation lib in its own chunk for better caching.

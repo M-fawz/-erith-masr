@@ -46,7 +46,7 @@ export function Booking() {
             loading="lazy"
             width={850}
             height={1264}
-            className="mx-auto w-full max-w-md -rotate-2 rounded-card object-cover shadow-card transition-transform duration-500 hover:rotate-0"
+            className="mx-auto w-full max-w-md rounded-card object-cover shadow-card transition-transform duration-500 sm:-rotate-2 sm:hover:rotate-0"
           />
         </Reveal>
 

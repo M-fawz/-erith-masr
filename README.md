@@ -47,18 +47,36 @@ docs/           # reference-images + spec docs + web_2.pdf (reference only — N
 
 ## Tunables (for the client)
 
-- **Aswan video orientation** — the client footage is rotated; correct it with
-  a single CSS variable in `src/styles/tokens.css`:
-  ```css
-  --aswan-rotate: -45deg; /* fine-tune in one place */
-  ```
+- **Aswan video** — the "حكاية أسوان" section plays the client's hand-edited,
+  already-upright footage `public/assets/video/aswan-edit.mp4` (lossless-remuxed
+  with `+faststart`; poster `aswan-edit-poster.jpg`). It loads only when scrolled
+  into view (play-on-view) and has a play/pause button. No rotation/transform is
+  applied. To swap in new footage, drop in an H.264/yuv420p mp4 and update the
+  `<source>` in `src/sections/Aswan.tsx`.
 - **Google Maps embed** — replace the Contact-section iframe `src` with the
   final Rabie Tours place-embed URL (search `TODO: map embed`).
-- **Fonts** — Cairo, Kufam, Traditional Arabic and Nirmala are self-hosted in
-  `public/assets/fonts/`. **Acumin** (Latin display) is a paid Adobe font and
-  ships as **Archivo** by default; drop `AcuminVariableConcept.otf` into
-  `public/assets/fonts/` and uncomment the one `@font-face` block in
-  `src/styles/fonts.css` to switch — no other code change needed.
+- **Fonts** — Cairo, Kufam, Traditional Arabic ship self-hosted as **WOFF2** in
+  `public/assets/fonts/` (Cairo + Kufam are preloaded). "Nirmala UI" is a
+  system-only mixed-script fallback (not downloaded). **Acumin** (Latin display)
+  is a paid Adobe font and ships as **Archivo** by default; drop
+  `AcuminVariableConcept.otf` into `public/assets/fonts/` and uncomment the one
+  `@font-face` block in `src/styles/fonts.css` to switch — no other code change.
+
+## Performance
+
+Optimized for production: WOFF2 fonts, WebP images with intrinsic dimensions,
+videos deferred (the hero ambience mounts on first interaction; the Aswan video
+is play-on-view), and below-the-fold sections are code-split (`React.lazy`) and
+deferred-mounted (`LazyMount`) so `framer-motion` stays off the first-paint path.
+
+Lighthouse (mobile, served gzip like production): **Accessibility 100,
+Best-Practices 100, SEO 100**, Performance ~76 with CLS 0, FCP ~1.8 s, TBT
+~0.3 s. The remaining Performance gap is **LCP (~4.4 s)** — inherent to a
+client-rendered SPA under Lighthouse's simulated 4× CPU / slow-4G (the hero image
+is preloaded and downloads in ~30 ms but can't paint until the JS executes;
+real-device/field LCP is markedly better). Reaching Perf ≥ 90 would require
+**prerendering/SSG** (serve the hero in static HTML, then hydrate) — a small
+architecture change kept out of this pass pending sign-off.
 
 ## Deploy (Vercel)
 

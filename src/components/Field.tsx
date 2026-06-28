@@ -14,7 +14,7 @@ type CommonProps = {
 };
 
 const fieldBase =
-  "w-full rounded-input border bg-card/70 px-4 py-3 font-body text-ink " +
+  "w-full rounded-input border bg-card/70 px-4 py-3 font-body text-base text-ink " +
   "placeholder:text-ink-soft/60 outline-none transition " +
   "focus:border-orange focus:ring-2 focus:ring-orange/30";
 

@@ -1,18 +1,19 @@
 /* fonts.css — self-hosted brand fonts (no external CDN; Vercel-friendly).
    Files live in /public/assets/fonts/ and are served at /assets/fonts/.
+   Shipped as WOFF2 (universally supported, ~3× smaller than the source TTF).
 
    Role map (see tokens.css):
-     AR display  → Kufam            (Kufam.ttf, variable 400–900)
-     AR body/UI  → Cairo            (Cairo.ttf, variable 200–1000)
-     AR naskh    → Traditional Arabic (TraditionalArabic-Regular/Bold.ttf)
-     Latin disp. → Acumin → Archivo (Archivo.ttf variable; Acumin = paid Adobe
+     AR display  → Kufam            (Kufam.woff2, variable 400–900)
+     AR body/UI  → Cairo            (Cairo.woff2, variable 200–1000)
+     AR naskh    → Traditional Arabic (TraditionalArabic-Regular/Bold.woff2)
+     Latin disp. → Acumin → Archivo (Archivo.woff2 variable; Acumin = paid Adobe
                                       font, not provided — drop the .otf in and
                                       uncomment the block below to switch)
-     fallback    → Nirmala UI       (Nirmala.ttf) */
+     fallback    → Nirmala UI       (system font only; not downloaded) */
 
 @font-face {
   font-family: "Cairo";
-  src: url("/assets/fonts/Cairo.ttf") format("truetype");
+  src: url("/assets/fonts/Cairo.woff2") format("woff2");
   font-weight: 200 1000;
   font-style: normal;
   font-display: swap;
@@ -20,7 +21,7 @@
 
 @font-face {
   font-family: "Kufam";
-  src: url("/assets/fonts/Kufam.ttf") format("truetype");
+  src: url("/assets/fonts/Kufam.woff2") format("woff2");
   font-weight: 400 900;
   font-style: normal;
   font-display: swap;
@@ -28,7 +29,7 @@
 
 @font-face {
   font-family: "Archivo";
-  src: url("/assets/fonts/Archivo.ttf") format("truetype");
+  src: url("/assets/fonts/Archivo.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -36,26 +37,23 @@
 
 @font-face {
   font-family: "Traditional Arabic";
-  src: url("/assets/fonts/TraditionalArabic-Regular.ttf") format("truetype");
+  src: url("/assets/fonts/TraditionalArabic-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Traditional Arabic";
-  src: url("/assets/fonts/TraditionalArabic-Bold.ttf") format("truetype");
+  src: url("/assets/fonts/TraditionalArabic-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Nirmala UI";
-  src: url("/assets/fonts/Nirmala.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+/* "Nirmala UI" is a mixed-script fallback only — referenced in the font stacks
+   in tokens.css but resolved from the user's system if present. We deliberately
+   do NOT self-host it (the source TTF is ~1.5 MB); there is no @font-face with a
+   url(), so it never adds a network request. */
 
 /* Acumin Variable Concept — paid Adobe font, NOT in the provided files.
    Drop AcuminVariableConcept.otf into /public/assets/fonts/ and uncomment;

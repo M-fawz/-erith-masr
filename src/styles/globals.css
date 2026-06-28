@@ -88,23 +88,9 @@
     padding-block: var(--section-py);
   }
 
-  /* Aswan footage orientation fix: rotate by the single tunable token and
-     scale up so the rotated corners never reveal empty space. object-fit
-     cover keeps it filling the frame. */
-  .aswan-video {
-    position: absolute;
-    top: 50%;
-    inset-inline-start: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%) rotate(var(--aswan-rotate)) scale(2.2);
-    transform-origin: center;
-  }
-
-  /* Gentle Ken-Burns drift on the video wrapper. */
+  /* Gentle Ken-Burns drift on the (already-upright) Aswan video. */
   .aswan-kenburns {
-    animation: kenburns 20s ease-in-out infinite alternate;
+    animation: kenburns 22s ease-in-out infinite alternate;
   }
 }
 

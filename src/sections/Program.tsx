@@ -6,6 +6,7 @@ import { Ornament } from "@/components/Ornament";
 import { Button } from "@/components/Button";
 import { Reveal } from "@/components/Reveal";
 import { MaskIcon } from "@/components/MaskIcon";
+import { AnimatedRoute } from "@/components/AnimatedRoute";
 
 const WavesIcon = () => (
   <svg viewBox="0 0 48 48" className="h-12 w-12 text-teal" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" aria-hidden="true">
@@ -29,7 +30,7 @@ function DestinationBlock({
 }) {
   const Photo = (
     <Reveal direction={photoFirst ? "start" : "end"} className="overflow-hidden rounded-card shadow-card ring-1 ring-line/40">
-      <img src={photo} alt={title} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+      <img src={photo} alt={title} loading="lazy" width={800} height={600} className="aspect-[4/3] w-full object-cover" />
     </Reveal>
   );
   const Text = (
@@ -49,9 +50,7 @@ function DestinationBlock({
   );
 
   return (
-    <div className="relative grid items-center gap-6 md:grid-cols-2 md:gap-14">
-      {/* route node on the central line (desktop) */}
-      <span className="absolute start-1/2 top-1/2 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal ring-4 ring-sand md:block" />
+    <div className="relative z-10 grid items-center gap-6 md:grid-cols-2 md:gap-14">
       {photoFirst ? (
         <>
           {Photo}
@@ -82,16 +81,17 @@ export function Program() {
 
         {/* Timeline */}
         <div className="relative mt-12">
-          {/* Central dashed teal route (desktop). Phase 3 swaps this for the
-              winding scroll-drawn SVG path with the sailboat travelling it. */}
-          <span className="absolute inset-y-0 start-1/2 hidden -translate-x-1/2 border-s-2 border-dashed border-teal/45 md:block" />
+          {/* Signature: winding teal route draws on scroll + sailboat travels
+              it (desktop). On mobile, a simple static dashed line. */}
+          <AnimatedRoute className="pointer-events-none absolute inset-0 z-0 hidden md:block" />
+          <span className="absolute inset-y-0 start-3 z-0 block -translate-x-1/2 border-s-2 border-dashed border-teal/40 md:hidden" />
 
           <div className="space-y-16 md:space-y-28">
             <DestinationBlock
               photoFirst
               title={t("program.dest1.title")}
               text={t("program.dest1.text")}
-              photo="/assets/backgrounds/aswan-feluccas.jpg"
+              photo="/assets/backgrounds/aswan-feluccas.webp"
               icons={
                 <>
                   <img src="/assets/icons/wheat.png" alt="" className="h-12 w-auto" />
@@ -116,7 +116,7 @@ export function Program() {
               photoFirst
               title={t("program.dest3.title")}
               text={t("program.dest3.text")}
-              photo="/assets/backgrounds/abu-simbel.jpg"
+              photo="/assets/backgrounds/abu-simbel.webp"
               icons={
                 <>
                   <img src="/assets/icons/temple-pylon.png" alt="" className="h-12 w-auto" />

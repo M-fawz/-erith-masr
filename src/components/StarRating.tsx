@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import { cn } from "@/lib/cn";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 const Star = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={cn("h-[1.1em] w-[1.1em]", className)} fill="currentColor" aria-hidden="true">
@@ -19,6 +21,7 @@ export function StarRating({
   max?: number;
   className?: string;
 }) {
+  const reduced = usePrefersReducedMotion();
   const pct = Math.max(0, Math.min(100, (value / max) * 100));
   const stars = Array.from({ length: max });
 
@@ -33,17 +36,21 @@ export function StarRating({
           <Star key={i} />
         ))}
       </div>
-      <div
+      <motion.div
         className="absolute inset-0 overflow-hidden"
-        style={{ width: `${pct}%` }}
         aria-hidden="true"
+        initial={reduced ? false : { width: "0%" }}
+        whileInView={{ width: `${pct}%` }}
+        viewport={{ once: true, amount: 0.6 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+        style={reduced ? { width: `${pct}%` } : undefined}
       >
         <div className="flex w-max gap-0.5 text-star">
           {stars.map((_, i) => (
             <Star key={i} />
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Container } from "@/components/Container";
 import { Button } from "@/components/Button";
@@ -6,18 +7,30 @@ import { LazyVideo } from "@/components/LazyVideo";
 
 export function Hero() {
   const { t } = useTranslation();
+  // The hero ambience video is purely decorative (20% opacity behind sand
+  // scrims). Mount it only on the first user interaction so it never competes
+  // for bandwidth at first paint nor becomes the LCP element (a full-bleed
+  // background would otherwise dominate LCP).
+  const [ambient, setAmbient] = useState(false);
+  useEffect(() => {
+    const on = () => setAmbient(true);
+    const evts = ["pointerdown", "scroll", "keydown", "touchstart", "wheel"] as const;
+    evts.forEach((e) => window.addEventListener(e, on, { once: true, passive: true }));
+    return () => evts.forEach((e) => window.removeEventListener(e, on));
+  }, []);
 
   return (
     <section id="home" className="relative scroll-mt-28 overflow-hidden">
-      {/* Soft intro video behind the composition (muted, play-on-view) */}
+      {/* Soft intro video behind the composition (muted, play-on-view, mounted
+          post-load). Sand scrims read clean like the reference even without it. */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <LazyVideo
-          sources={[{ src: "/assets/video/intro.mp4", type: "video/mp4" }]}
-          poster="/assets/video/intro-poster.jpg"
-          className="h-full w-full"
-          videoClassName="h-full w-full object-cover opacity-20"
-        />
-        {/* Sand scrim so the page reads clean like the reference */}
+        {ambient && (
+          <LazyVideo
+            sources={[{ src: "/assets/video/intro.mp4", type: "video/mp4" }]}
+            className="h-full w-full"
+            videoClassName="h-full w-full object-cover opacity-20"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-sand/80 via-sand/55 to-sand/90" />
         <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_70%_30%,transparent,var(--sand))]" />
       </div>
@@ -44,13 +57,10 @@ export function Hero() {
           </Reveal>
         </div>
 
-        {/* Composition — inline-start (left) on desktop */}
-        <Reveal
-          direction="end"
-          delay={0.1}
-          distance={36}
-          className="relative order-1 min-w-0 lg:order-2"
-        >
+        {/* Composition — inline-start (left) on desktop. Rendered directly (no
+            opacity-gated reveal) so the preloaded island image — the LCP — paints
+            immediately rather than after a scroll-reveal. */}
+        <div className="relative order-1 min-w-0 lg:order-2">
           {/* Palm watermark behind the men */}
           <img
             src="/assets/icons/palm.png"
@@ -63,9 +73,11 @@ export function Hero() {
             alt={t("hero.title")}
             width={1400}
             height={788}
+            fetchPriority="high"
+            decoding="async"
             className="relative mx-auto w-full max-w-[660px] animate-float drop-shadow-[0_30px_45px_rgba(31,31,31,0.28)]"
           />
-        </Reveal>
+        </div>
       </Container>
     </section>
   );

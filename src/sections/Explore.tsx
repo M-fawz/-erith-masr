@@ -5,14 +5,14 @@ import { Reveal } from "@/components/Reveal";
 import { cn } from "@/lib/cn";
 
 const ITEMS = [
-  { key: "abuSimbel", img: "/assets/backgrounds/abu-simbel.jpg", wide: true },
-  { key: "balloons", img: "/assets/backgrounds/balloons.jpg" },
-  { key: "qaitbay", img: "/assets/backgrounds/qaitbay.jpg" },
-  { key: "philae", img: "/assets/backgrounds/pharaonic-temple.jpg", tall: true },
-  { key: "azhar", img: "/assets/backgrounds/al-azhar.jpg" },
-  { key: "montaza", img: "/assets/backgrounds/montaza.jpg" },
-  { key: "toutankhamun", img: "/assets/backgrounds/toutankhamun.jpg" },
-  { key: "ibnTulun", img: "/assets/backgrounds/ibn-tulun.jpg", wide: true },
+  { key: "abuSimbel", img: "/assets/backgrounds/abu-simbel.webp", w: 640, h: 640, wide: true },
+  { key: "balloons", img: "/assets/backgrounds/balloons.webp", w: 1076, h: 1348 },
+  { key: "qaitbay", img: "/assets/backgrounds/qaitbay.webp", w: 720, h: 900 },
+  { key: "philae", img: "/assets/backgrounds/pharaonic-temple.webp", w: 1148, h: 2048, tall: true },
+  { key: "azhar", img: "/assets/backgrounds/al-azhar.webp", w: 768, h: 1024 },
+  { key: "montaza", img: "/assets/backgrounds/montaza.webp", w: 736, h: 932 },
+  { key: "toutankhamun", img: "/assets/backgrounds/toutankhamun.webp", w: 1080, h: 1920 },
+  { key: "ibnTulun", img: "/assets/backgrounds/ibn-tulun.webp", w: 735, h: 1152, wide: true },
 ] as const;
 
 export function Explore() {
@@ -44,6 +44,8 @@ export function Explore() {
                 src={item.img}
                 alt={t(`explore.items.${item.key}.title`)}
                 loading="lazy"
+                width={item.w}
+                height={item.h}
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-transparent" />

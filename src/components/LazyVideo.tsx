@@ -30,19 +30,35 @@ export function LazyVideo({
     if (!v) return;
     if (reduced) return; // honor reduced-motion: stay on the poster frame
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          if (v.preload === "none") v.preload = "auto";
-          void v.play().catch(() => {});
-        } else {
-          v.pause();
-        }
-      },
-      { threshold: 0.25 },
-    );
-    io.observe(v);
-    return () => io.disconnect();
+    let io: IntersectionObserver | undefined;
+    const start = () => {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            if (v.preload === "none") v.preload = "auto";
+            void v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
+        },
+        { threshold: 0.25 },
+      );
+      io.observe(v);
+    };
+
+    // Defer fetching/playing the (decorative) video until the page has finished
+    // loading its critical content, so it never competes with the LCP image.
+    let raf = 0;
+    if (document.readyState === "complete") {
+      raf = window.requestAnimationFrame(start);
+    } else {
+      window.addEventListener("load", start, { once: true });
+    }
+    return () => {
+      window.removeEventListener("load", start);
+      if (raf) cancelAnimationFrame(raf);
+      io?.disconnect();
+    };
   }, [reduced]);
 
   return (

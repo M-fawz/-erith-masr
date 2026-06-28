@@ -34,12 +34,12 @@ export function Footer() {
           <p className="max-w-sm font-body text-sm leading-relaxed text-ink/80">
             {t("footer.tagline")}
           </p>
-          <BrandSlogan />
+          <BrandSlogan tone="text-teal-600" />
         </div>
 
         {/* Quick links */}
         <nav aria-label={t("footer.quickLinks")} className="space-y-4">
-          <h3 className="font-display text-lg font-bold text-orange">
+          <h3 className="font-display text-lg font-bold text-teal-600">
             {t("footer.quickLinks")}
           </h3>
           <ul className="space-y-2">
@@ -47,7 +47,7 @@ export function Footer() {
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
-                  className="font-body text-sm text-ink/80 transition-colors hover:text-orange"
+                  className="font-body text-sm text-ink/80 transition-colors hover:text-teal-600"
                 >
                   {t(item.key)}
                 </a>
@@ -58,7 +58,7 @@ export function Footer() {
 
         {/* Social */}
         <div className="space-y-4">
-          <h3 className="font-display text-lg font-bold text-orange">
+          <h3 className="font-display text-lg font-bold text-teal-600">
             {t("footer.followus")}
           </h3>
           <Socials />

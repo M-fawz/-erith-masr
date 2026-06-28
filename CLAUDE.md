@@ -1,3 +1,4 @@
+
 # CLAUDE.md — Erith Masr Project Memory & Architecture
 
 > **Read this file at the start of EVERY session before writing any code.**
@@ -143,6 +144,75 @@ generic UI glyphs. Never block on a missing asset — stub it and log it.
 ## 7. Decision Log
 <!-- Append newest at the top. Format: [YYYY-MM-DD] decision — reason. -->
 
+- **[2026-06-28] Aswan video — client's hand-edited file (supersedes the
+  transpose fix).** The client straightened the footage themselves and dropped
+  `aswan edit.mp4` into `public/assets/video/`. ffprobe: **1024×576 H.264/yuv420p,
+  no rotation flag, ~5.9 MB** — already browser-perfect. Lossless-remuxed it with
+  `-movflags +faststart` → `aswan-edit.mp4`, generated `aswan-edit-poster.jpg`
+  from frame 0, deleted the old `aswan.mp4`/`.webm`/poster and the spaced-name
+  original. No transpose, no CSS transform. The `<video>` now also **plays on
+  view** (`preload="none"` + IntersectionObserver) so its ~5.8 MB never loads
+  during first paint.
+- **[2026-06-28] Phase 4 — polish & performance.** Lighthouse mobile went from
+  **Perf 56 / A11y 97 / BP 100 / SEO 92** → **Perf ~76 / A11y 100 / BP 100 /
+  SEO 100** (median of clean runs, gzip-served like prod). Transfer **8.4 MB →
+  ~1.9 MB**; FCP 9.4 s→1.8 s, TBT 0→~300 ms (see note), SI 9.4 s→2.1 s, CLS
+  **0**. Changes:
+  - **Fonts → WOFF2** via `wawoff2` (3.6 MB TTF → 0.7 MB); preload + @font-face
+    now woff2. **Dropped self-hosted Nirmala** (1.48 MB) — system-only fallback
+    (no `url()`, never fetched).
+  - **Videos**: `intro.mp4` 2.65 MB→0.55 MB (540p, audio stripped); the hero
+    ambience video now mounts only on first user interaction (so it is never the
+    LCP element nor competes at first paint). Aswan video is play-on-view
+    (`preload="none"` + IntersectionObserver, ~5.8 MB off the initial load).
+  - **Images**: gallery + program photos `.jpg`→`.webp` (~2.3 MB→1.6 MB) +
+    intrinsic `width`/`height`. Removed unused jpgs + posters.
+  - **Code-split + defer**: below-the-fold sections are `React.lazy` AND wrapped
+    in `<LazyMount>` (IntersectionObserver) so their chunks + **framer-motion**
+    don't fetch/execute until scrolled near. Deep-links eager-mount the targeted
+    section; deep-link scroll polls for it.
+  - **Took framer-motion off the critical path**: rewrote `Reveal` (CSS +
+    IntersectionObserver), the Navbar drawer (CSS transitions + `inert`), and
+    `Button` (CSS press) — none import framer-motion now, so the 122 KB motion
+    chunk only loads with the lazy sections that truly use it (AnimatedRoute,
+    Ornament, StarRating, form success). Dropped the unused `RevealGroup`.
+  - **LCP**: preload the hero-island image; render the hero composition directly
+    (not behind an opacity-gated reveal) so the preloaded image paints ASAP.
+  - **A11y**: inputs/search `text-base` (≥16 px → no iOS zoom); fixed the only
+    AA contrast fails — footer headings + slogan orange-on-sand-deep (1.73) →
+    `text-teal-600`. RTL drawer slide now flips with `dir`.
+  - **SEO/build**: added `public/robots.txt`; `prebuild` clean script (Vite's
+    `emptyOutDir`/node `rmSync` silently no-op on this Arabic+space path on
+    Windows — git-bash `rm -rf dist` works locally; Vercel's ASCII checkout is
+    fine). Clean `dist` **9.8 MB**.
+  - **Remaining gap (Perf 90)**: the lone weak metric is **LCP ~4.4 s**, gated
+    by React mount time — the hero image downloads in ~27 ms but can't paint
+    until the SPA's JS executes (the inherent client-rendered ceiling under
+    Lighthouse's 4× CPU / slow-4G simulation; real-device/field LCP is markedly
+    better). Closing it to ≥90 needs **SSG/prerender** (serve the hero in static
+    HTML, then hydrate) — an architecture change flagged for the client to
+    approve, not done in this polish pass.
+- **[2026-06-28] Aswan video — REAL orientation fix (superseded by the client's
+  hand-edited file above; kept for history).**
+  ffprobe showed the source is **3840×2160 (4K landscape) with a bogus
+  `displaymatrix: -90°` flag**. Applying that flag (ffmpeg default autorotate)
+  yields a sideways portrait; the **raw landscape is upright**. Baked the correct
+  orientation into the files with `transpose=2` (autorotate consumes the matrix,
+  the transpose is physical → output carries NO rotation flag): `aswan.mp4`
+  (H.264, yuv420p, +faststart, 960×540, ~5 MB) + `aswan.webm` (VP9, ~6.6 MB) +
+  upright `aswan-poster.jpg`. **Removed the CSS `rotate()` and the
+  `--aswan-rotate` token entirely** — the `<video>` now renders normally
+  (object-cover, muted, loop, playsinline, autoPlay, preload=metadata, poster)
+  with a visible play/pause button. (`-metadata rotate=0` alone did NOT strip
+  the matrix in this ffmpeg build — transpose was required.)
+- **[2026-06-28] Phase 3 motion.** Signature `AnimatedRoute`: measures the
+  timeline (ResizeObserver), generates a Catmull-Rom winding path in pixel space,
+  draws it on scroll (`useScroll`+`useTransform` → `stroke-dashoffset`), the
+  sailboat travels it via CSS `offset-path`/`offsetDistance`, nodes light as it
+  passes. Desktop only (mobile keeps a static dashed line). Star ratings fill
+  left→right on reveal; ✶ ornaments stroke-draw in; all reveals/animations gate
+  on `usePrefersReducedMotion` (now also honors `?nomotion=1` for QA shots).
+
 - **[2026-06-28] Phase 2 complete (all 7 sections + Explore).** Built faithful
   to `docs/reference-images` in AR+EN, responsive. Reusables: Reveal/RevealGroup,
   LazyVideo (preload=none, play-on-view), StarRating (partial gold fill),
@@ -243,6 +313,12 @@ generic UI glyphs. Never block on a missing asset — stub it and log it.
 
 ## 7.1 Concrete asset mapping (renamed into `public/assets/`)
 
+> **Phase 4 update:** all `backgrounds/*.jpg` were converted to `.webp` (and the
+> code references updated); the unused `alexandria`/`nefertiti` jpgs were dropped.
+> Fonts ship as `.woff2` (no `.ttf`). The Aswan video is the client's
+> hand-edited `video/aswan-edit.mp4` (+ `aswan-edit-poster.jpg`); the old
+> `aswan.*`/`intro-poster.jpg` were removed.
+
 | File (public/assets/…) | Source | Component / use |
 |---|---|---|
 | `logo/LOGO-final.png` | `logo/` | Navbar + footer brand lockup, favicon |
@@ -273,8 +349,8 @@ generic UI glyphs. Never block on a missing asset — stub it and log it.
 | `icons/temple-pylon.png` | `…013258.png` | Program dest3 / About stat icon |
 | `icons/sunset-arch.png` | `…013315.png` | About stat icon / accent |
 | `backgrounds/hero-island.png` | client (extracted from PDF) | **Hero composition** (3 men + landmark island, transparent) |
-| `video/intro.mp4` (+ `intro-poster.jpg`) | `video/intro.mp4` | Hero background video (play-on-view) |
-| `video/aswan.mp4` + `aswan.webm` (+ `aswan-poster.jpg`) | transcoded from `aswan.mov` | Aswan documentary (mp4 listed first) |
+| `video/intro.mp4` | `video/intro.mp4` (re-encoded 540p, no audio) | Hero ambience video (mounts on first interaction; no poster) |
+| `video/aswan-edit.mp4` (+ `aswan-edit-poster.jpg`) | client's hand-edited `aswan edit.mp4` | Aswan documentary (play-on-view) |
 
 ---
 
@@ -305,18 +381,23 @@ generic UI glyphs. Never block on a missing asset — stub it and log it.
 - [x] _(bonus)_ Explore Egypt gallery (lazy-loaded landmark grid)
 
 ### Phase 3 — Motion
-- [ ] Page-load staggered hero reveal
-- [ ] Scroll-reveal for all sections (IntersectionObserver / whileInView)
-- [ ] SVG route draws on scroll + sailboat travels the path
-- [ ] Ornament/divider strokes draw in; count-up; star fill; hover micro-interactions
-- [ ] `prefers-reduced-motion` honored everywhere
+- [x] Page-load staggered hero reveal
+- [x] Scroll-reveal for all sections (IntersectionObserver / whileInView)
+- [x] SVG route draws on scroll + sailboat travels the path
+- [x] Ornament/divider strokes draw in; count-up; star fill; hover micro-interactions
+- [x] `prefers-reduced-motion` honored everywhere
 
 ### Phase 4 — Polish & performance
-- [ ] Mobile pass (360–430px) for every section, both dirs
-- [ ] Image/video optimization + lazy loading + posters
-- [ ] Lighthouse: Perf ≥ 90, A11y ≥ 95, Best-Practices ≥ 95
-- [ ] Cross-browser + RTL/LTR final QA
-- [ ] README for running/building the project
+- [x] Mobile pass (360–430px) for every section, both dirs (no h-overflow; CSS
+      drawer slides from correct edge per dir; inputs ≥16 px; verified 360/390/430)
+- [x] Image/video optimization + lazy loading + posters (woff2 fonts; webp images
+      w/ dims; videos deferred/play-on-view; code-split + LazyMount)
+- [~] Lighthouse (mobile, gzip): **A11y 100, BP 100, SEO 100** ✓; **Perf ~76**
+      (target 90). Only LCP (~4.4 s) is weak — CSR JS-mount ceiling under the lab
+      simulation; needs SSG/prerender to reach ≥90 (flagged for client).
+- [x] Cross-browser + RTL/LTR final QA (Chromium engine; AR+EN; console clean;
+      Aswan video upright + playing)
+- [x] README for running/building the project (Deploy + tunables sections)
 
 ---
 

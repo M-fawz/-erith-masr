@@ -6,6 +6,8 @@
   "description": "Erith Masr (إرث مصر) — bilingual heritage-tourism site for Rabie Tours",
   "scripts": {
     "dev": "vite",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "prebuild": "npm run clean",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "tsc --noEmit"
@@ -28,10 +30,12 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "ffmpeg-static": "^5.3.0",
+    "ffprobe-static": "^3.1.0",
     "postcss": "^8.4.47",
     "puppeteer-core": "^23.11.1",
     "tailwindcss": "^3.4.12",
     "typescript": "^5.5.4",
-    "vite": "^5.4.6"
+    "vite": "^5.4.6",
+    "wawoff2": "^2.0.1"
   }
 }

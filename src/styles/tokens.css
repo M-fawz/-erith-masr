@@ -53,9 +53,6 @@
   --shadow-soft: 0 8px 24px -12px rgba(31, 31, 31, 0.18);
   --section-py: clamp(3.5rem, 6vw, 7rem);
   --container: min(1280px, 92vw);
-
-  /* ---- Tunables ---- */
-  --aswan-rotate: -45deg; /* client footage orientation fix (single knob) */
 }
 
 html[dir="rtl"] {
